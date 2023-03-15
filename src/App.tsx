@@ -1,6 +1,6 @@
 import HeaderComponent from './components/Header/Header';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchResults } from './redux/store/index';
 import { useAppDispatch } from './redux/store/index'
@@ -19,6 +19,12 @@ const App: React.FC = () => {
   const state = useSelector((state: State) => state);
   const dispatch = useAppDispatch();
   const [currentAudio, setCurrentAudio] = useState<any>(null);
+
+  useEffect(() => {
+    window.onload = () => {
+      dispatch(fetchResults("akon"));
+    };
+  }, [dispatch]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
