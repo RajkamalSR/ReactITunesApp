@@ -1,0 +1,11 @@
+.header{
+    height: 42px;
+    background: #222222ed;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    font-family: 'Fredoka One', cursive;
+    letter-spacing: 0.2rem;
+    font-size: 1.2rem;
+    color: #fff;
+  }
