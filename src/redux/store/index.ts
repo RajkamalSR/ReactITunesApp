@@ -1,5 +1,3 @@
-import { createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
 import axios from 'axios';
 import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
