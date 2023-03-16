@@ -41,7 +41,6 @@ const App: React.FC = () => {
   };
 
   const handleAudioClick = (audio: any) => {
-
     if (currentAudio && currentAudio !== audio) {
       currentAudio.pause();
     }
