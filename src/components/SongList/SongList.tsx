@@ -4,6 +4,7 @@ import { fetchResults } from '../../redux/store';
 import { useAppDispatch } from '../../redux/store';
 
 import "./SongList.css";
+import LoaderComponent  from './../Loader/Loader'
 
 interface State {
     searchTerm: string;
@@ -73,7 +74,7 @@ export default function SongListComponent() {
                 </div>
             </form>
 
-            {state.loading && <div>Loading...</div>}
+            {state.loading && <div className="page-loader"><LoaderComponent/></div>}
 
             {state.error && <div>Error: {state.error}</div>}
 
