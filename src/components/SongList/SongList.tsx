@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { fetchResults } from '../../redux/store';
 import { useAppDispatch } from '../../redux/store';
+import styled from "styled-components";
 
 import "./SongList.css";
-import LoaderComponent  from './../Loader/Loader'
+import LoaderComponent from './../Loader/Loader'
 
 interface State {
     searchTerm: string;
@@ -20,11 +21,17 @@ export default function SongListComponent() {
     const dispatch = useAppDispatch();
     const [currentAudio, setCurrentAudio] = useState<any>(null);
 
+    const [songs, setSongs] = useState<any>([]);
+    const [offset, setOffset] = useState(0);
+
     useEffect(() => {
         window.onload = () => {
-            dispatch(fetchResults("akon"));
+            dispatch(fetchResults("akon", offset));
         };
+        setSongs([...songs, ...state.results]);
     }, [dispatch]);
+
+    const Wrapper = styled.div`width: 100px; margin: auto; padding: 30px 0px;`;
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInputValue(event.target.value);
@@ -33,7 +40,7 @@ export default function SongListComponent() {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         (!inputValue) && setInputValue("akon");
-        dispatch(fetchResults(inputValue));
+        dispatch(fetchResults(inputValue, offset));
     };
 
     const clearAllPlayAudios = (removeEl: string, className: string) => {
@@ -65,6 +72,13 @@ export default function SongListComponent() {
         }
     };
 
+    const handleScroll = (event: any) => {
+        const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
+        if (scrollTop + clientHeight >= scrollHeight) {
+            setOffset(offset + 20);
+        }
+    };
+
     return (
         <div>
             <form onSubmit={handleSubmit}>
@@ -74,7 +88,9 @@ export default function SongListComponent() {
                 </div>
             </form>
 
-            {state.loading && <div className="page-loader"><LoaderComponent/></div>}
+
+
+            {state.loading && <div className="page-loader"><LoaderComponent /></div>}
 
             {state.error && <div>Error: {state.error}</div>}
 
