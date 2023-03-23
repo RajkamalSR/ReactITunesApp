@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { fetchResults } from '../../redux/store';
 import { useAppDispatch } from '../../redux/store';
 import styled from "styled-components";
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 import "./SongList.css";
 import LoaderComponent from './../Loader/Loader'
@@ -22,13 +23,13 @@ export default function SongListComponent() {
     const [currentAudio, setCurrentAudio] = useState<any>(null);
 
     const [songs, setSongs] = useState<any>([]);
-    const [offset, setOffset] = useState(0);
+    const [offset, setOffset] = useState(10);
 
     useEffect(() => {
         window.onload = () => {
-            dispatch(fetchResults("akon", offset));
+            //dispatch(fetchResults("akon"));
         };
-        setSongs([...songs, ...state.results]);
+        setSongs([state.results]);
     }, [dispatch]);
 
     const Wrapper = styled.div`width: 100px; margin: auto; padding: 30px 0px;`;
@@ -79,22 +80,32 @@ export default function SongListComponent() {
         }
     };
 
+    const fetchData = () => {
+        setTimeout(() => {
+            setOffset(offset + 10);
+          }, 1000);     
+    }
+
     return (
         <div>
             <form onSubmit={handleSubmit}>
                 <div className="search-box">
-                    <input type="text" value={inputValue} placeholder="Search by artist, album or song.." onChange={handleInputChange} id="searchInput" />
+                    <input type="text" value={inputValue} placeholder="Search your favourties.." onChange={handleInputChange} id="searchInput" />
                     <button type="submit" className="search-btn"><span className="material-icons material-symbols-outlined search-icon">search</span></button>
                 </div>
             </form>
-
-
 
             {state.loading && <div className="page-loader"><LoaderComponent /></div>}
 
             {state.error && <div>Error: {state.error}</div>}
 
-            {state.results.map((result: any, index: any) => (
+            <InfiniteScroll
+                dataLength={offset} //This is important field to render the next data
+                next={fetchData}
+                hasMore={state.results.length > offset}
+                loader={<LoaderComponent />}
+            >             
+            {state.results.slice(0, offset).map((result: any, index: any) => (
                 <div key={result.trackId} className="songlist-wrapper">
                     <img src={result.artworkUrl60} alt={result.trackName} className="img-avatar" />
                     <div className="album-list">
@@ -115,6 +126,7 @@ export default function SongListComponent() {
                     </audio>
                 </div>
             ))}
+            </InfiniteScroll>
         </div>
     );
 }
