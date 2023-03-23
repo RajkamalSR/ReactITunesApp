@@ -90,7 +90,7 @@ export default function SongListComponent() {
         <div>
             <form onSubmit={handleSubmit}>
                 <div className="search-box">
-                    <input type="text" value={inputValue} placeholder="Search your favourties.." onChange={handleInputChange} id="searchInput" />
+                    <input type="text" value={inputValue} placeholder="Search your favorite songs, album, artists.." onChange={handleInputChange} id="searchInput" />
                     <button type="submit" className="search-btn"><span className="material-icons material-symbols-outlined search-icon">search</span></button>
                 </div>
             </form>
