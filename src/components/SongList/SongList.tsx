@@ -22,15 +22,7 @@ export default function SongListComponent() {
     const dispatch = useAppDispatch();
     const [currentAudio, setCurrentAudio] = useState<any>(null);
 
-    const [songs, setSongs] = useState<any>([]);
     const [offset, setOffset] = useState(10);
-
-    useEffect(() => {
-        window.onload = () => {
-            //dispatch(fetchResults("akon"));
-        };
-        setSongs([state.results]);
-    }, [dispatch]);
 
     const Wrapper = styled.div`width: 100px; margin: auto; padding: 30px 0px;`;
 
@@ -51,6 +43,11 @@ export default function SongListComponent() {
         }
     };
 
+    const audioBtnHandler = (audioElement:any, addClassEl:string, removeClassEl:string) => {
+        audioElement.closest('.songlist-wrapper').classList.add(addClassEl);
+        audioElement.closest('.songlist-wrapper').classList.remove(removeClassEl);
+    }
+
     const handleAudioClick = (audio: any) => {
         const audioEL: any = audio as HTMLAudioElement;
 
@@ -60,23 +57,14 @@ export default function SongListComponent() {
 
         if (audioEL.paused) {
             clearAllPlayAudios('songlist-wrapper', 'playing');
-            audioEL.closest('.songlist-wrapper').classList.add("playing");
-            audioEL.closest('.songlist-wrapper').classList.remove("pause");
+            audioBtnHandler(audioEL, 'playing', 'pause');
             audioEL.play();
             setCurrentAudio(audio);
         } else {
             clearAllPlayAudios('songlist-wrapper', 'pause');
-            audioEL.closest('.songlist-wrapper').classList.add("pause");
-            audioEL.closest('.songlist-wrapper').classList.remove("playing");
+            audioBtnHandler(audioEL, 'pause', 'playing');
             audioEL.pause();
             setCurrentAudio(null);
-        }
-    };
-
-    const handleScroll = (event: any) => {
-        const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
-        if (scrollTop + clientHeight >= scrollHeight) {
-            setOffset(offset + 20);
         }
     };
 
@@ -100,7 +88,7 @@ export default function SongListComponent() {
             {state.error && <div>Error: {state.error}</div>}
 
             <InfiniteScroll
-                dataLength={offset} //This is important field to render the next data
+                dataLength={offset}
                 next={fetchData}
                 hasMore={state.results.length > offset}
                 loader={<LoaderComponent />}
