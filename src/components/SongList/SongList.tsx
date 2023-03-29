@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { fetchResults } from '../../redux/store';
 import { useAppDispatch } from '../../redux/store';
-import styled from "styled-components";
 import InfiniteScroll from 'react-infinite-scroll-component';
+import Avatar from '@mui/material/Avatar';
+import {SongListWrapper, ImgAvatar, AlbumList, ArtistName, CollectionName, AudioControlsWrapper, AudioButton, AudioInput} from './SongListStyled'
 
 import "./SongList.css";
 import LoaderComponent from './../Loader/Loader'
@@ -15,7 +16,6 @@ interface State {
     error: any;
 }
 
-
 export default function SongListComponent() {
     const [inputValue, setInputValue] = useState<string>('');
     const state = useSelector((state: State) => state);
@@ -23,8 +23,6 @@ export default function SongListComponent() {
     const [currentAudio, setCurrentAudio] = useState<any>(null);
 
     const [offset, setOffset] = useState(10);
-
-    const Wrapper = styled.div`width: 100px; margin: auto; padding: 30px 0px;`;
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInputValue(event.target.value);
@@ -43,7 +41,7 @@ export default function SongListComponent() {
         }
     };
 
-    const audioBtnHandler = (audioElement:any, addClassEl:string, removeClassEl:string) => {
+    const audioBtnHandler = (audioElement: any, addClassEl: string, removeClassEl: string) => {
         audioElement.closest('.songlist-wrapper').classList.add(addClassEl);
         audioElement.closest('.songlist-wrapper').classList.remove(removeClassEl);
     }
@@ -71,7 +69,7 @@ export default function SongListComponent() {
     const fetchData = () => {
         setTimeout(() => {
             setOffset(offset + 10);
-          }, 1000);     
+        }, 1000);
     }
 
     return (
@@ -92,28 +90,24 @@ export default function SongListComponent() {
                 next={fetchData}
                 hasMore={state.results.length > offset}
                 loader={<LoaderComponent />}
-            >             
-            {state.results.slice(0, offset).map((result: any, index: any) => (
-                <div key={result.trackId} className="songlist-wrapper">
-                    <img src={result.artworkUrl60} alt={result.trackName} className="img-avatar" />
-                    <div className="album-list">
-                        <h4 className="albumname">{result.artistName}</h4>
-                        <p>{result.collectionName}</p>
-                    </div>
-                    <div className="audio-controls">
-                        <div onClick={() => handleAudioClick(document.getElementsByTagName('audio')[index])}>
-                            <div className="material-icons audio-btn play-btn">play_circle</div>
-                            <div className="material-icons audio-btn pause-btn">pause_circle</div>
-                        </div>
+            >
+                {state.results.slice(0, offset).map((result: any, index: any) => (
+                    <SongListWrapper key={result.trackId} className="songlist-wrapper">
+                        <Avatar alt={result.trackName} src={result.artworkUrl60}  sx={{ width: 72, height: 72 }} />
+                        <AlbumList>
+                            <ArtistName>{result.artistName}</ArtistName>
+                            <CollectionName>{result.collectionName}</CollectionName>
+                        </AlbumList>
+                        <AudioControlsWrapper>
+                            <div onClick={() => handleAudioClick(document.getElementsByTagName('audio')[index])}>
+                                <AudioButton className="material-icons play-btn">play_circle</AudioButton>
+                                <AudioButton className="material-icons pause-btn">pause_circle</AudioButton>
+                            </div>
+                        </AudioControlsWrapper>
+                        <AudioInput controls src={result.previewUrl}></AudioInput>
+                    </SongListWrapper>
 
-                    </div>
-                    <audio
-                        controls
-                        src={result.previewUrl}
-                    >
-                    </audio>
-                </div>
-            ))}
+                ))}
             </InfiniteScroll>
         </div>
     );
