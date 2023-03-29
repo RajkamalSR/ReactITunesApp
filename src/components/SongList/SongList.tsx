@@ -37,9 +37,7 @@ export default function SongListComponent() {
 
     const clearAllPlayAudios = (removeEl: string, className: string) => {
         const divs: any = document.getElementsByClassName(removeEl);
-        for (let i = 0; i < divs.length; i++) {
-            divs[i].classList.remove(className);
-        }
+        Array.from(divs).map((div:any, index:number) => { divs[index].classList.remove(className)})
     };
 
     const audioBtnHandler = (audioElement: any, addClassEl: string, removeClassEl: string) => {
