@@ -4,10 +4,11 @@ import { fetchResults } from '../../redux/store';
 import { useAppDispatch } from '../../redux/store';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Avatar from '@mui/material/Avatar';
-import {SongListWrapper, ImgAvatar, AlbumList, ArtistName, CollectionName, AudioControlsWrapper, AudioButton, AudioInput} from './SongListStyled'
+import {SongListWrapper, ImgAvatar, AlbumList, ArtistName, CollectionName, AudioControlsWrapper, AudioButton, AudioInput} from './SongListStyled';
+
+import LoaderComponent from './../Loader/Loader'
 
 import "./SongList.css";
-import LoaderComponent from './../Loader/Loader'
 
 interface State {
     searchTerm: string;
@@ -17,11 +18,11 @@ interface State {
 }
 
 export default function SongListComponent() {
-    const [inputValue, setInputValue] = useState<string>('');
     const state = useSelector((state: State) => state);
     const dispatch = useAppDispatch();
-    const [currentAudio, setCurrentAudio] = useState<any>(null);
 
+    const [currentAudio, setCurrentAudio] = useState<any>(null);
+    const [inputValue, setInputValue] = useState<string>('');
     const [offset, setOffset] = useState(10);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,7 +107,6 @@ export default function SongListComponent() {
                         </AudioControlsWrapper>
                         <AudioInput controls src={result.previewUrl}></AudioInput>
                     </SongListWrapper>
-
                 ))}
             </InfiniteScroll>
         </div>
