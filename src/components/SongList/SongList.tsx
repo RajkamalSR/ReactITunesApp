@@ -4,7 +4,7 @@ import { fetchResults } from '../../redux/store';
 import { useAppDispatch } from '../../redux/store';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Avatar from '@mui/material/Avatar';
-import {SongListWrapper, ImgAvatar, AlbumList, ArtistName, CollectionName, AudioControlsWrapper, AudioButton, AudioInput} from './SongListStyled';
+import { SearchBox, SearchInput, SearchButton, SearchIcon, SearchForm, SongListWrapper, ImgAvatar, AlbumList, ArtistName, CollectionName, AudioControlsWrapper, AudioButton, AudioInput } from './SongListStyled'
 
 import LoaderComponent from './../Loader/Loader'
 
@@ -73,12 +73,12 @@ export default function SongListComponent() {
 
     return (
         <div>
-            <form onSubmit={handleSubmit}>
-                <div className="search-box">
-                    <input type="text" value={inputValue} placeholder="Search your favorite songs, album, artists.." onChange={handleInputChange} id="searchInput" />
-                    <button type="submit" className="search-btn"><span className="material-icons material-symbols-outlined search-icon">search</span></button>
-                </div>
-            </form>
+            <SearchForm onSubmit={handleSubmit}>
+                <SearchBox>
+                    <SearchInput type="text" value={inputValue} placeholder="Search your favorite songs, album, artists.." onChange={handleInputChange} id="searchInput"></SearchInput>
+                    <SearchButton type="submit"><SearchIcon className="material-icons material-symbols-outlined">search</SearchIcon></SearchButton>
+                </SearchBox>
+            </SearchForm>
 
             {state.loading && <div className="page-loader"><LoaderComponent /></div>}
 
@@ -92,7 +92,7 @@ export default function SongListComponent() {
             >
                 {state.results.slice(0, offset).map((result: any, index: any) => (
                     <SongListWrapper key={result.trackId} className="songlist-wrapper">
-                        <Avatar alt={result.trackName} src={result.artworkUrl60}  sx={{ width: 72, height: 72 }} />
+                        <Avatar alt={result.trackName} src={result.artworkUrl60} sx={{ width: 72, height: 72 }} />
                         <AlbumList>
                             <ArtistName>{result.artistName}</ArtistName>
                             <CollectionName>{result.collectionName}</CollectionName>
